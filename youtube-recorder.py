@@ -42,7 +42,9 @@ class YouTubeRecorder:
             with open(settings_file, 'r', encoding='utf-8') as f:
                 settings = json.load(f)
                 base_dir = settings.get('recordings_dir')
-                self.recordings_dir = os.path.join(base_dir, "recordings")
+                # 경로 구분자를 일관되게 변경
+                base_dir = base_dir.replace('\\', '/')
+                self.recordings_dir = os.path.join(base_dir, "recordings").replace('\\', '/')
         except (FileNotFoundError, json.JSONDecodeError):
             # tkinter 루트 윈도우 생성 (보이지 않게)
             root = tk.Tk()
@@ -59,8 +61,9 @@ class YouTubeRecorder:
             if not base_dir:
                 base_dir = self.base_dir
                 
-            # recordings 폴더 경로 설정
-            self.recordings_dir = os.path.join(base_dir, "recordings")
+            # 경로 구분자를 일관되게 변경
+            base_dir = base_dir.replace('\\', '/')
+            self.recordings_dir = os.path.join(base_dir, "recordings").replace('\\', '/')
             
             # 설정 저장
             with open(settings_file, 'w', encoding='utf-8') as f:
@@ -222,7 +225,7 @@ class YouTubeRecorder:
                     continue
                 
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                filename = os.path.join(self.recordings_dir, f"{channel_id}_{title}_{timestamp}.ts")
+                filename = os.path.join(self.recordings_dir, f"{channel_id}_{title}_{timestamp}.ts").replace('\\', '/')
                 
                 os.makedirs(self.recordings_dir, exist_ok=True)
                 
